@@ -113,11 +113,11 @@ class Parsimony_Scorer:
 		print(self.scored_trees[best_score])
 
 def main():
-	scorer = Parsimony_Scorer("105treesOutgroupNamed.txt","morph_data.nex")
+	scorer = Parsimony_Scorer("rooted_named_trees.txt","morph_data.nex")
 	scorer.run()
-	scorer = Parsimony_Scorer("105treesOutgroupNamed.txt","RAG1_trimmed.nex")
+	scorer = Parsimony_Scorer("rooted_named_trees.txt","RAG1_trimmed.nex")
 	scorer.run()
-	scorer = Parsimony_Scorer("105treesOutgroupNamed.txt","CYTB_trimmed.nex")
+	scorer = Parsimony_Scorer("rooted_named_trees.txt","CYTB_trimmed.nex")
 	scorer.run()
 
 
