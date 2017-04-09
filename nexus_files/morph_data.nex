@@ -1,0 +1,14 @@
+#NEXUS
+
+begin characters;
+	dimensions ntax=6 nchar=10;
+	format datatype=dna gap=- missing=?;
+	matrix
+	Lungfish ATTTTTTTTT
+	Frog AATTTTTTTA
+	Opossum AAATTTTTAT
+	Gecko AAAAATATTT
+	Ostrich AAAAAATTTT
+	Turtle AAAATTTATT
+;
+end;
