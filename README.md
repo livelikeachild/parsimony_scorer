@@ -6,7 +6,7 @@ and a nexus file of data.
 
 The test data and function runs all possible rooted trees with 6 leaves on 3 datasets from separate nexus files.
 
-###NOTES:
+### NOTES:
 
 - `parsimony_tree` expects your newick strings to have spaces after commas. You have to manually update what's inside the `.split()` method on line 32 if you want to remove them
 -  The names you use in your newick file must _match_ the names you use in your nexus files. 
