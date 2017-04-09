@@ -12,14 +12,14 @@ class Parsimony_Scorer:
 		'''Opens the newick and nexus files and prepares data for analysis'''
 		newick_file = open(newick_file,'rU')
 		#assumes the newick file is formatted with each tree on its own line
-		self.newick_trees = newick_file.readlines()
+		self.__newick_trees = newick_file.readlines()
 
-		self.nexus_file_name = nexus_file
+		self.__nexus_file_name = nexus_file
 		nexus_file = AlignIO.read(open("nexus_files/"+nexus_file),
 			"nexus")
-		self.nexus_matrix, self.nexus_taxa_order = self.__set_chars_and_taxa_order(nexus_file)
+		self.__nexus_matrix, self.__nexus_taxa_order = self.__set_chars_and_taxa_order(nexus_file)
 
-		self.scored_trees = {}
+		self.__scored_trees = {}
 
 	def __set_chars_and_taxa_order(self,nexus_file):
 		'''Sets the character matrix and taxa order from the nexus file'''
@@ -34,11 +34,11 @@ class Parsimony_Scorer:
 	def update_taxa_names(self,taxa_names):
 		'''If your newick-file taxa names don't match those in the nexus
 		file, give the newick-file names here'''
-		self.nexus_taxa_order = taxa_names
+		self.__nexus_taxa_order = taxa_names
 
 	def run(self):
 		'''Runs the scorer over the data'''
-		print("Finding best tree for " + self.nexus_file_name + "...")
+		print("Finding best tree for " + self.__nexus_file_name + "...")
 		self.__score_all_trees()
 		best_tree = self.__find_best_tree()
 		return best_tree
@@ -46,15 +46,15 @@ class Parsimony_Scorer:
 	def __score_all_trees(self):
 		'''Scores all the trees against the dataset and collects the data
 		in the dictionary self.scored_trees. The dictionary is keyed by score'''
-		for newick in self.newick_trees:
+		for newick in self.__newick_trees:
 			score = self.__score_tree(newick)
-			self.scored_trees[score] = newick
+			self.__scored_trees[score] = newick
 
 	def __score_tree(self, newick):
 		'''Scores a single tree against the entire dataset'''
 		tree = Parsimony_Tree(newick)
 
-		num_cols = len(self.nexus_matrix[0])
+		num_cols = len(self.__nexus_matrix[0])
 		total_parsimony_score = 0
 		for column in range(num_cols):
 			char_dict = self.__get_character_dict(column)
@@ -67,8 +67,8 @@ class Parsimony_Scorer:
 		'''Returns a dictionary of taxa-name and taxa-character
 		to be sent to the tree's add_leaf_states method.
 		Adapted from code by Carolyn Sy'''
-		chars = self.nexus_matrix[:,column]
-		char_dict = dict(zip(self.nexus_taxa_order, chars))
+		chars = self.__nexus_matrix[:,column]
+		char_dict = dict(zip(self.__nexus_taxa_order, chars))
 		return char_dict
 
 	def __fitch_bottom_up(self, node_list):
@@ -113,9 +113,9 @@ class Parsimony_Scorer:
 		'''Finds and prints the best score and best scored tree.
 		NOTE: if there are multiple trees with the same best score,
 		you may not get the same tree returned each time.'''
-		best_score = min(self.scored_trees.keys())
-		#print("Best Parsimony score:",best_score)
-		return self.scored_trees[best_score]
+		best_score = min(self.__scored_trees.keys())
+		print("Best Parsimony score:",best_score)
+		return self.__scored_trees[best_score]
 
 def main():
 	scorer = Parsimony_Scorer("rooted_trees.txt","morph_data.nex")
