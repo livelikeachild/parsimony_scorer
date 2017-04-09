@@ -18,14 +18,22 @@ class Parsimony_Tree:
 
 		self.populate_parsimony_tree()
 
+	def set_taxa_list(self):
+		'''Sets the taxa list to hold the names of the taxa in the 
+		order they appear in the newick string'''
+		removals = ['(',')',',',';']
+		taxa_string = self.newick
+		for char in removals:
+			taxa_string = taxa_string.replace(char,"")
+
+		return taxa_string.split()
+
 	def populate_parsimony_tree(self,chars = None):
 		'''If a dict of character states is provided in chars, 
 		it builds the tree with those states. Otherwise, you can 
-		add the states in later. 
-		Assumes your newick string is structured like so:
-		(Lungfish, (Opossum, (Turtle, (Frog, (Gecko, Ostrich)))));
-		and splits it accordingly. Change what's in split's 
-		()'s below to match your newick string.
+		add the states in later. Assumes your newick string 
+		contains a space after each comma and splits it accordingly. 
+		Change what's in split's ()'s below to match your newick string.
 		'''
 		if chars:
 			self.chars = chars
@@ -70,16 +78,6 @@ class Parsimony_Tree:
 		This resets the leaves' character states from a new dict of data.'''
 		for node in self.leaves:
 			node.state = chars[node.name]
-
-	def set_taxa_list(self):
-		'''Sets the taxa list to hold the names of the taxa in the 
-		order they appear in the newick string'''
-		removals = ['(',')',',',';']
-		taxa_string = self.newick
-		for char in removals:
-			taxa_string = taxa_string.replace(char,"")
-
-		return taxa_string.split()
 
 	def get_taxa_list(self):
 		'''Returns the taxa list'''
