@@ -1,6 +1,6 @@
 # parsimony_scorer
 
-Parsimony_Scorer takes in a file of newick-format strings
+`Parsimony_Scorer` takes in a file of newick-format strings
 and a nexus file of data. It then builds and scores the given evolutionary trees, finding the most parsimonious tree according to the given data set.
 
 The test data and function runs all possible rooted trees with 6 leaves on 3 datasets from separate nexus files.

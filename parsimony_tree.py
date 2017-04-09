@@ -3,7 +3,7 @@ from parsimony_node import Parsimony_Node
 class Parsimony_Tree:
 
 	def __init__(self, newick, internal = 7):
-		'''initializes an evolutionary tree and populates 
+		'''Initializes an evolutionary tree and populates 
 		it based on the given newick string with optional 
 		"internal" value to name the internal nodes. If no 
 		number is given, it assumes that the tree will
@@ -12,7 +12,6 @@ class Parsimony_Tree:
 		self.newick = newick
 		self.internal = internal
 		self.leaf_num = 0
-		self.chars = {}
 		self.leaves= []
 		self.taxa_list = self.set_taxa_list()
 
@@ -28,20 +27,16 @@ class Parsimony_Tree:
 
 		return taxa_string.split()
 
-	def populate_parsimony_tree(self,chars = None):
-		'''If a dict of character states is provided in chars, 
-		it builds the tree with those states. Otherwise, you can 
-		add the states in later. Assumes your newick string 
-		contains a space after each comma and splits it accordingly. 
-		Change what's in split's ()'s below to match your newick string.
-		'''
-		if chars:
-			self.chars = chars
+	def populate_parsimony_tree(self):
+		'''Builds the tree from the newick string. 
+		Assumes your newick string contains a space after each 
+		comma and splits it accordingly. Change what's in split's 
+		()'s below to match your newick string.'''
 		newick = self.newick.split(', ')
 		self.root, newick = self.add_node(newick)
 
 	def add_node(self, newick):
-		'''recursive function that builds an entire tree from a 
+		'''Recursive function that builds an entire tree from a 
 		newick string. If chars data was given, it will also set 
 		the leaf character states'''
 		
@@ -64,12 +59,7 @@ class Parsimony_Tree:
 		'''Builds a leaf node using the taxa-list and characters
 		if they exist'''
 		node = Parsimony_Node(self.taxa_list[self.leaf_num])
-		self.leaf_num += 1
-
-		if self.chars:
-			char_info = self.chars[node.name]
-			node.state = char_info
-		
+		self.leaf_num += 1	
 		self.leaves.append(node)
 		return node
 
@@ -78,10 +68,6 @@ class Parsimony_Tree:
 		This resets the leaves' character states from a new dict of data.'''
 		for node in self.leaves:
 			node.state = chars[node.name]
-
-	def get_taxa_list(self):
-		'''Returns the taxa list'''
-		return self.taxa_list
 
 	def get_post_order_nodes(self):
 		'''Returns list of nodes in the tree in post-order traversal.'''

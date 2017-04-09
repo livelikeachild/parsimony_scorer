@@ -47,22 +47,21 @@ class Parsimony_Scorer:
 	def score_tree(self, newick):
 		'''Scores a single tree against the entire dataset'''
 		tree = Parsimony_Tree(newick)
-		newick_taxa = tree.get_taxa_list()
 
 		num_cols = len(self.nexus_matrix[0])
 		total_parsimony_score = 0
-		for i in range(num_cols):
-			char_dict = self.get_character_dict(newick_taxa, i)
+		for column in range(num_cols):
+			char_dict = self.get_character_dict(column)
 			tree.add_leaf_states(char_dict)
 			node_list = tree.get_post_order_nodes()
 			total_parsimony_score += self.fitch_bottom_up(node_list)
 		return total_parsimony_score
 
-	def get_character_dict(self, newick_taxa, i):
+	def get_character_dict(self, column):
 		'''Returns a dictionary of taxa-name and taxa-character
 		to be sent to the tree's add_leaf_states method.
 		Adapted from code by Carolyn Sy'''
-		chars = self.nexus_matrix[:,i]
+		chars = self.nexus_matrix[:,column]
 		char_dict = dict(zip(self.nexus_taxa_order, chars))
 		return char_dict
 
@@ -109,8 +108,8 @@ class Parsimony_Scorer:
 		NOTE: if there are multiple trees with the same best score,
 		you may not get the same tree returned each time.'''
 		best_score = min(self.scored_trees.keys())
-		print(best_score)
-		print(self.scored_trees[best_score])
+		print("Best Parsimony score: "+best_score)
+		print("Best Tree: "+self.scored_trees[best_score])
 
 def main():
 	scorer = Parsimony_Scorer("rooted_named_trees.txt","morph_data.nex")
