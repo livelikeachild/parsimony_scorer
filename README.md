@@ -5,6 +5,10 @@ and a nexus file of data. It then builds and scores the given evolutionary trees
 
 The test data and function runs all possible rooted trees with 6 leaves on 3 datasets from separate nexus files.
 
+### DEPENDENCIES:
+
+- This code uses Biopython and numpy
+
 ### NOTES:
 
 - `Parsimony_Tree` expects your newick strings to have spaces after commas. You have to manually update what's inside the `.split()` method on **line 32** if you want to remove them
