@@ -13,3 +13,15 @@ class Parsimony_Node:
 	def is_leaf(self):
 		'''Returns true if the node is a leaf'''
 		return self.left == None and self.right == None
+
+	def get_state(self):
+		return self.state
+
+	def set_state(self,states):
+		self.state = states
+
+	def get_right(self):
+		return self.right
+
+	def get_left(self):
+		return self.left

@@ -36,9 +36,8 @@ class Parsimony_Scorer:
 		file, give the newick-file names here'''
 		self._nexus_taxa_order = taxa_names
 
-	def run(self):
+	def get_best_tree(self):
 		'''Runs the scorer over the data'''
-		print("Finding best tree for " + self._nexus_file_name + "...")
 		self._score_all_trees()
 		best_tree = self._find_best_tree()
 		return best_tree
@@ -76,19 +75,19 @@ class Parsimony_Scorer:
 		parsimony_score = 0
 		for node in node_list:
 			if not node.is_leaf():
-				parsimony_score += self._set_internal_state(node)
+				parsimony_score += self._find_internal_state(node)
 		return parsimony_score
 
-	def _set_internal_state(self,node):
+	def _find_internal_state(self,node):
 		'''Sets the state options for internal nodes'''
-		l_state = node.left.state
-		r_state = node.right.state
+		l_state = node.get_left().get_state()
+		r_state = node.get_right().get_state()
 		intersection = self._get_intersection(l_state, r_state)
 		if intersection:
-			node.state = intersection
+			node.set_state(intersection)
 			return 0
 		union = self._get_union(l_state, r_state)
-		node.state = union
+		node.set_state(union) 
 		return 1
 	
 	def _get_intersection(self, l_state,r_state):
@@ -118,19 +117,20 @@ class Parsimony_Scorer:
 		return self._scored_trees[best_score]
 
 def main():
-	scorer = Parsimony_Scorer("rooted_trees.txt","morph_data.nex")
-	scorer.update_taxa_names(['0','1','2','3','4','5'])
-	best_tree = scorer.run()
-	print("Best Tree: ",best_tree)
-	scorer = Parsimony_Scorer("rooted_trees.txt","RAG1_trimmed.nex")
-	scorer.update_taxa_names(['0','1','2','3','4','5'])
-	best_tree = scorer.run()
-	print("Best Tree: ",best_tree)
-	scorer = Parsimony_Scorer("rooted_trees.txt","CYTB_trimmed.nex")
-	scorer.update_taxa_names(['0','1','2','3','4','5'])
-	best_tree = scorer.run()
-	print("Best Tree: ",best_tree)
+	nexus_files = ["morph_data.nex","RAG1_trimmed.nex","CYTB_trimmed.nex"]
 
+	for nexus in nexus_files:
+		scorer = Parsimony_Scorer("rooted_trees.txt",nexus)
+		scorer.update_taxa_names(['0','1','2','3','4','5'])
+		print("Finding best tree for " + nexus + "...")
+		best_tree = scorer.get_best_tree()
+		print("Best Tree: ",best_tree)
+
+	for nexus in nexus_files:
+		scorer = Parsimony_Scorer("rooted_named_trees.txt",nexus)
+		print("Finding best tree for " + nexus + "...")
+		best_tree = scorer.get_best_tree()
+		print("Best Tree: ",best_tree)
 
 if __name__ == "__main__":
 	main()
